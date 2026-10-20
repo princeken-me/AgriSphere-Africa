@@ -1,0 +1,152 @@
+{
+  "$schema": "https://firebase.google.com/docs/firestore/blueprint/v1",
+  "entities": {
+    "users": {
+      "title": "UserProfile",
+      "description": "Registered platform participants (Farmers, Buyers, Cooperatives, Logistics, Admins)",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "fullName": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["farmer", "buyer", "cooperative", "logistics", "admin"] },
+        "country": { "type": "string" },
+        "phone": { "type": "string" },
+        "companyName": { "type": "string" },
+        "farmName": { "type": "string" },
+        "location": { "type": "string" },
+        "bio": { "type": "string" },
+        "avatar": { "type": "string" },
+        "joinedDate": { "type": "string" },
+        "verifiedStatus": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "fullName", "email", "role", "country"]
+    },
+    "listings": {
+      "title": "CropListing",
+      "description": "Agricultural commodity listings available on the pan-African marketplace",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "cropCategory": { "type": "string" },
+        "variety": { "type": "string" },
+        "quantityAvailableKg": { "type": "number" },
+        "minOrderKg": { "type": "number" },
+        "pricePerKgUSD": { "type": "number" },
+        "pricePerKgLocal": { "type": "number" },
+        "currency": { "type": "string" },
+        "grade": { "type": "string" },
+        "moistureContent": { "type": "string" },
+        "harvestDate": { "type": "string" },
+        "country": { "type": "string" },
+        "farmerLocation": { "type": "string" },
+        "farmerId": { "type": "string" },
+        "farmerName": { "type": "string" },
+        "farmerRating": { "type": "number" },
+        "farmerDealsCount": { "type": "number" },
+        "organic": { "type": "boolean" },
+        "certifiedExport": { "type": "boolean" },
+        "featured": { "type": "boolean" },
+        "image": { "type": "string" },
+        "description": { "type": "string" },
+        "packagingType": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "title", "cropCategory", "pricePerKgUSD", "quantityAvailableKg", "country", "farmerName"]
+    },
+    "orders": {
+      "title": "Order",
+      "description": "Escrow secured agricultural trade orders",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "orderNumber": { "type": "string" },
+        "listingId": { "type": "string" },
+        "listingTitle": { "type": "string" },
+        "buyerId": { "type": "string" },
+        "buyerName": { "type": "string" },
+        "buyerCountry": { "type": "string" },
+        "farmerId": { "type": "string" },
+        "farmerName": { "type": "string" },
+        "farmerCountry": { "type": "string" },
+        "quantityKg": { "type": "number" },
+        "unitPriceUSD": { "type": "number" },
+        "totalPriceUSD": { "type": "number" },
+        "localCurrency": { "type": "string" },
+        "totalPriceLocal": { "type": "number" },
+        "status": { "type": "string", "enum": ["escrow_paid", "inspection", "in_transit", "delivered", "cancelled"] },
+        "orderDate": { "type": "string" },
+        "estimatedDelivery": { "type": "string" },
+        "deliveryLocation": { "type": "string" },
+        "timeline": { "type": "array" },
+        "inspectionCert": { "type": "object" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "orderNumber", "listingId", "buyerId", "farmerId", "quantityKg", "totalPriceUSD", "status"]
+    },
+    "conversations": {
+      "title": "Conversation",
+      "description": "Trader messaging threads and negotiation channels",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "participantIds": { "type": "array", "items": { "type": "string" } },
+        "participantNames": { "type": "array", "items": { "type": "string" } },
+        "lastMessage": { "type": "string" },
+        "lastMessageTime": { "type": "string" },
+        "unreadCount": { "type": "number" },
+        "listingId": { "type": "string" },
+        "listingTitle": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "participantIds", "lastMessage"]
+    },
+    "messages": {
+      "title": "Message",
+      "description": "Chat messages exchanged within trader conversations",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "conversationId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "senderRole": { "type": "string" },
+        "text": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "isRead": { "type": "boolean" }
+      },
+      "required": ["id", "conversationId", "senderId", "text"]
+    },
+    "notifications": {
+      "title": "NotificationItem",
+      "description": "User notifications for escrow alerts, price shifts, and delivery status",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "read": { "type": "boolean" },
+        "actionUrl": { "type": "string" }
+      },
+      "required": ["id", "userId", "title", "message"]
+    },
+    "systemSettings": {
+      "title": "SystemSettings",
+      "description": "Global admin configuration parameters and broadcasts",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "escrowFeeRate": { "type": "number" },
+        "systemBroadcast": { "type": "string" },
+        "maintenanceMode": { "type": "boolean" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["escrowFeeRate"]
+    }
+  }
+}
